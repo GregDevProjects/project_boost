@@ -21,14 +21,7 @@ public class Rocket : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        alignAngle();
         ProcessInput();
-    }
-
-    private void alignAngle()
-    {
-        transform.position = new Vector3(transform.position.x, transform.position.y, 0);
-        transform.eulerAngles = new Vector3(0, 0, transform.eulerAngles.z);
     }
 
     private void ProcessInput()
