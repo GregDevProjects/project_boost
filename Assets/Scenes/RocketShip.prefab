@@ -58,7 +58,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: d90110b0bd866954eac73bd7a39dec92, type: 2}
+  - {fileID: 2100000, guid: 1b0fa3976bfc45840960eda0321c4469, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -105,7 +105,7 @@ GameObject:
   - component: {fileID: 5674121949988030497}
   m_Layer: 0
   m_Name: RocketShip
-  m_TagString: Untagged
+  m_TagString: friendly
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -142,7 +142,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 56
   m_CollisionDetection: 0
 --- !u!114 &5674121949988030496
 MonoBehaviour:
@@ -158,6 +158,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rcsThrust: 200
   mainThrust: 1000
+  mainEngine: {fileID: 8300000, guid: be48b19d677abf3419c6b9d72cc13c07, type: 3}
+  death: {fileID: 8300000, guid: c67e4373e60c3f849afb6d82cbf16d01, type: 3}
+  startLevel: {fileID: 8300000, guid: 6b8c6dc1da8343143b75145114f929e4, type: 3}
 --- !u!82 &5674121949988030497
 AudioSource:
   m_ObjectHideFlags: 0
@@ -168,7 +171,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: be48b19d677abf3419c6b9d72cc13c07, type: 3}
+  m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1.18
@@ -312,7 +315,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 1dcd000e2034f2a4cbd22575e5305d1b, type: 2}
+  - {fileID: 2100000, guid: a0c19ad4fadaddc4ca5c2d22e44f8d17, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -495,7 +498,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: d90110b0bd866954eac73bd7a39dec92, type: 2}
+  - {fileID: 2100000, guid: 1b0fa3976bfc45840960eda0321c4469, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
