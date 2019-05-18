@@ -8,9 +8,14 @@ public class Rocket : MonoBehaviour
 {
     [SerializeField] float rcsThrust = 150f;
     [SerializeField] float mainThrust = 150f;
+    [SerializeField] float levelLoadDelay = 2f;
     [SerializeField] AudioClip mainEngine;
     [SerializeField] AudioClip death;
     [SerializeField] AudioClip startLevel;
+
+    [SerializeField] ParticleSystem mainEngineParticles;
+    [SerializeField] ParticleSystem successParticles;
+    [SerializeField] ParticleSystem deathParticles;
 
     Rigidbody rigidBody;
     AudioSource audioSource;
@@ -68,6 +73,8 @@ public class Rocket : MonoBehaviour
 
     private void StartDeath()
     {
+        mainEngineParticles.Stop();
+        deathParticles.Play();
         audioSource.Stop();
         audioSource.PlayOneShot(death);
         Invoke("Death", 2f); //parameterize time
@@ -76,7 +83,8 @@ public class Rocket : MonoBehaviour
 
     private void StartFinish()
     {
-        Invoke("LoadNextScene", 1f); //parameterize time
+        successParticles.Play();
+        Invoke("LoadNextScene", levelLoadDelay);
         state = State.Transcending;
         audioSource.Stop();
         audioSource.PlayOneShot(startLevel);
@@ -119,15 +127,26 @@ public class Rocket : MonoBehaviour
     {
         if (Input.GetKey(KeyCode.Space))
         {
-            float thrustThisFrame = mainThrust * Time.deltaTime;
-            rigidBody.AddRelativeForce(Vector3.up * thrustThisFrame);
-            if (!audioSource.isPlaying)
-            {
-                audioSource.PlayOneShot(mainEngine);
-            } else
-            {
-                //https://support.unity3d.com/hc/en-us/articles/206116386-How-do-I-play-multiple-Audio-Sources-from-one-GameObject-
-            }
-        } 
+            ApplyTrust();
+        }
+        else
+        {
+            mainEngineParticles.Stop();
+        }
+    }
+
+    private void ApplyTrust()
+    {
+        mainEngineParticles.Play();
+        float thrustThisFrame = mainThrust * Time.deltaTime;
+        rigidBody.AddRelativeForce(Vector3.up * thrustThisFrame);
+        if (!audioSource.isPlaying)
+        {
+            audioSource.PlayOneShot(mainEngine);
+        }
+        else
+        {
+            //https://support.unity3d.com/hc/en-us/articles/206116386-How-do-I-play-multiple-Audio-Sources-from-one-GameObject-
+        }
     }
 }
