@@ -5,10 +5,22 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
-    path: Assets/Scenes/Level1.unity
+  - enabled: 0
+    path: Assets/Levels/Level1.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
   - enabled: 1
-    path: Assets/Scenes/Level2.unity
+    path: Assets/Levels/Level3_windycity.unity
+    guid: 0c254bd91eb6d894e9b4ec28ae2ac656
+  - enabled: 1
+    path: Assets/Levels/Level6_tron.unity
+    guid: b7a4120f0fbcffa40b1df4b109fd7bd6
+  - enabled: 1
+    path: Assets/Levels/Level2_treehouse.unity
     guid: b24e1347abe092640bd75e16f4339736
+  - enabled: 1
+    path: Assets/Levels/Level7_space.unity
+    guid: 75a8fdbebc5c36349afc131fbe52c233
+  - enabled: 1
+    path: Assets/Levels/Level5_flashlight.unity
+    guid: a3b04e29c0d64b3449adb3c631506ea6
   m_configObjects: {}

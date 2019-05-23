@@ -9,7 +9,6 @@ public class Rocket : MonoBehaviour
     [SerializeField] float rcsThrust = 150f;
     [SerializeField] float mainThrust = 150f;
     [SerializeField] float levelLoadDelay = 2f;
-    [SerializeField] AudioClip mainEngine;
     [SerializeField] AudioClip death;
     [SerializeField] AudioClip startLevel;
 
@@ -18,7 +17,11 @@ public class Rocket : MonoBehaviour
     [SerializeField] ParticleSystem deathParticles;
 
     Rigidbody rigidBody;
-    AudioSource audioSource;
+    AudioSource audioSourceSuccessDeath;
+    AudioSource audioSourceThrust;
+
+    [SerializeField]
+    bool collisionsDisabled = false;
 
     enum State {Alive, Dying, Transcending};
     State state = State.Alive;
@@ -28,8 +31,10 @@ public class Rocket : MonoBehaviour
         //'generics'
         //gets a refrence to something attached to the game object
         rigidBody = GetComponent<Rigidbody>();
-        audioSource = GetComponent<AudioSource>();
-        
+        AudioSource[] audioSources = GetComponents<AudioSource>();
+
+        audioSourceSuccessDeath = audioSources[0];
+        audioSourceThrust = audioSources[1];
     }
 
     // Update is called once per frame
@@ -37,7 +42,7 @@ public class Rocket : MonoBehaviour
     {
         if (state == State.Dying)
         {
-           // audioSource.Stop();
+            audioSourceThrust.Stop();
             return;
         }
         ProcessInput();
@@ -47,19 +52,34 @@ public class Rocket : MonoBehaviour
     {
         Rotate();
         Thrust();
+        if (Debug.isDebugBuild)
+        {
+            DebugKeys();
+        }
+        
+    }
+
+    private void DebugKeys()
+    {
+        if (Input.GetKeyDown(KeyCode.L))
+        {
+            LoadNextScene();
+        }
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+            collisionsDisabled = !collisionsDisabled;
+        }
     }
 
     void OnCollisionEnter(Collision collision)
     {
-        if (state !=State.Alive)
+        if (state !=State.Alive || collisionsDisabled)
         {
             return;
         }
         switch(collision.gameObject.tag)
         {
             case "Friendly":
-                //do nothing
-                print("okay");
                 break;
             case "Finish":
                 StartFinish();
@@ -75,8 +95,8 @@ public class Rocket : MonoBehaviour
     {
         mainEngineParticles.Stop();
         deathParticles.Play();
-        audioSource.Stop();
-        audioSource.PlayOneShot(death);
+        audioSourceSuccessDeath.Stop();
+        audioSourceSuccessDeath.PlayOneShot(death);
         Invoke("Death", 2f); //parameterize time
         state = State.Dying;
     }
@@ -86,19 +106,28 @@ public class Rocket : MonoBehaviour
         successParticles.Play();
         Invoke("LoadNextScene", levelLoadDelay);
         state = State.Transcending;
-        audioSource.Stop();
-        audioSource.PlayOneShot(startLevel);
+        audioSourceSuccessDeath.Stop();
+        audioSourceSuccessDeath.PlayOneShot(startLevel);
     }
 
     private void Death()
     {
         
-        SceneManager.LoadScene(0);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
     private void LoadNextScene()
     {
-        SceneManager.LoadScene(1);
+        int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
+        //int nextSceneIndex = SceneManager.
+        print( currentSceneIndex);
+        print(SceneManager.sceneCountInBuildSettings);
+        if (SceneManager.sceneCountInBuildSettings <= currentSceneIndex + 1)
+        {
+            SceneManager.LoadScene(0);
+            return;
+        }
+        SceneManager.LoadScene(currentSceneIndex+1);
     }
 
     private void Rotate()
@@ -132,6 +161,7 @@ public class Rocket : MonoBehaviour
         else
         {
             mainEngineParticles.Stop();
+            audioSourceThrust.Stop();
         }
     }
 
@@ -140,13 +170,9 @@ public class Rocket : MonoBehaviour
         mainEngineParticles.Play();
         float thrustThisFrame = mainThrust * Time.deltaTime;
         rigidBody.AddRelativeForce(Vector3.up * thrustThisFrame);
-        if (!audioSource.isPlaying)
+        if (!audioSourceThrust.isPlaying)
         {
-            audioSource.PlayOneShot(mainEngine);
-        }
-        else
-        {
-            //https://support.unity3d.com/hc/en-us/articles/206116386-How-do-I-play-multiple-Audio-Sources-from-one-GameObject-
+            audioSourceThrust.Play();
         }
     }
 }
